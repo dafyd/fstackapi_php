@@ -85,4 +85,21 @@ class FSSubmission extends FSClient {
         return json_decode($response->getBody(), true);
     }
 
+
+    /*
+     * This add a new submission to a form
+     * @param $submissionId: ID of the submission associated with the download required
+     * @param $fieldId: ID of the field containing the file to download
+     * @param $index: index of the file to download (if multiple files were uploaded)
+     * @return binary string of the file
+     * */
+    public function download($submissionId, $fieldId, $index = 0) {
+        if(is_null($submissionId) || is_null($fieldId) ) {
+            throw new FSException("File Download require a submission ID and a field ID");
+        }
+        $uri = "download/".$submissionId."/".$fieldId."/".$index;
+        $response = $this->client->get($uri);
+        return $response->getBody()->getContents();
+    }
+
 }
